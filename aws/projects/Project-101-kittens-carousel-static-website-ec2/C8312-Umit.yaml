@@ -1,0 +1,25 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: "Template for my firt AWS Project"
+Resources:
+  WebServer:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0ab4d1e9cf9a1215a
+      InstanceType: t2.micro
+      SecurityGroups:
+        - allow ssh and http
+      KeyName: ec2_key_atNVirginia
+      Tags:
+        - Key: Name
+          Value: ApacheServer
+      UserData:
+        Fn::Base64: |
+          #!/bin/bash -xe
+          yum update -y aws-cfn-bootstrap
+          sudo yum -y install httpd
+          sudo yum -y install git 
+          sudo cd /tmp
+          sudo git clone https://MiranaS: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@github.com/MiranaSGit/MyAWS_Projects.git
+          sudo cp -R MyAWS_Projects/aws/projects/Project-101-kittens-carousel-static-website-ec2/static-web/* /var/www/html/
+          sudo rm -rf MyAWS_Projects/
+          sudo service httpd start
